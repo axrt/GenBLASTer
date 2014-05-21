@@ -1,0 +1,90 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package genblaster.db.sluice.derby;
+
+import genblaster.db.DatabaseConstants;
+import genblaster.db.sluice.Matrix_sluice;
+import genblaster.output.FitchMatrix;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+/**
+ *
+ * @author Alexander
+ */
+public class DerbyMatrix_sluice extends Matrix_sluice {
+
+    private static final Logger log = Logger.getLogger(DerbyMatrix_sluice.class.getName());
+
+    protected DerbyMatrix_sluice(Connection connection) {
+        super(connection);
+    }
+
+    @Override
+    public FitchMatrix calculateFitchMatrix(List<Integer> distance_ids) throws Exception {
+        log.log(Level.INFO, "Loading matrix from database.");
+        Statement statement = this.connection.createStatement();
+        ResultSet resultSet;
+        List<String[]> databaseRows = new ArrayList<>(distance_ids.size());
+        String[] row;
+        for (Integer integer : distance_ids) {
+            resultSet = statement.executeQuery("SELECT "
+                    + DatabaseConstants.A_GENOME_NAME + ","
+                    + DatabaseConstants.B_GENOME_NAME + ","
+                    + DatabaseConstants.DISTANCE
+                    + " FROM "
+                    + DatabaseConstants.GENBLASTER + DatabaseConstants.DISTANCE
+                    + " WHERE "
+                    + DatabaseConstants.ID + "=" + integer);
+            if (resultSet.next()) {
+                row = new String[3];
+                row[0] = resultSet.getString(1);
+                row[1] = resultSet.getString(2);
+                row[2] = String.valueOf(String.format("%.4g%n", resultSet.getDouble(3)));
+                databaseRows.add(row);
+            }
+        }
+        //Frist create a legend
+        Set<String> legendNames = new HashSet<>(distance_ids.size() + 1);
+        for (Object[] r : databaseRows) {
+            legendNames.add((String) r[1]);
+        }
+        String[] legend_names = legendNames.toArray(new String[legendNames.size()]);
+        HashMap<String, Integer> legend = new HashMap<>(legend_names.length);
+        for (int i = 0; i < legend_names.length; i++) {
+            legend.put(legend_names[i], i);
+        }
+
+        //Now to the matrix
+        String[][] matrix = new String[legend_names.length + 1][legend_names.length];
+        for (int i = 0; i < matrix[0].length; i++) {
+            matrix[0][i] = String.valueOf(legend.get(legend_names[i]));
+        }
+        for (int i = 0; i < matrix[0].length; i++) {
+            for (int j = i + 1; j < matrix.length; j++) {
+                if (i + 1 != j) {
+                    for (String[] strings : databaseRows) {
+                        if (strings[0].equals(legend_names[i]) && strings[1].equals(legend_names[j - 1])) {
+                            matrix[i][j] = strings[2];
+                            matrix[j - 1][i + 1] = strings[2];
+                            break;
+                        }
+                    }
+                } else {
+                    matrix[i][j] = "0.000";
+                }
+            }
+        }
+        return FitchMatrix.newInstanceFromMatrixAndLegend(this, matrix, legend);
+    }
+
+    public static DerbyMatrix_sluice newInstance(Connection connection) {
+        return new DerbyMatrix_sluice(connection);
+    }
+}

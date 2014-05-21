@@ -1,0 +1,84 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package genblaster.NCBI.BLAST_DB;
+
+/**
+ *
+ * @author Alexander
+ */
+public class Genblaster_Constants {
+    //TODO protect the constructor with an assertion error sending
+
+    public static final String Linux = "Linux";
+    public static final String Windows = "Windows";
+    public static final String Mac = "Mac";
+    public static final String genblaster_folder_name = ".genblaster";
+    public static final String ncbi_folder_name = "ncbi";
+    public static final String linux_folder_name = "lin";
+    public static final String windows_folder_name = "win";
+    public static final String macos_folder_name = "osx";
+    public static final String orf_folder_name = "ORF_Base";
+    public static final String blast_db_folder_name = "BLAST_DB";
+    public static final String blastp_tasks_folder_name = "BLAST_TASK";
+    public static final String blastp_results_folder_name = "BLAST_RESULT";
+    public static final String makeblastdb = "makeblastdb";
+    public static final String blastp = "blastp";
+    public static final String blastp_task = "blastp_task";
+    public static final String blastp_result = "blastp_result";
+    public static final String system_home = ".system.home";
+    public static final String genblaster_system_home = genblaster_folder_name + system_home;
+    public static final String makeblastdb_system_home = makeblastdb + system_home;
+    public static final String blast_db_system_home = blast_db_folder_name + system_home;
+    public static final String orf_system_home = orf_folder_name + system_home;
+    public static final String blastp_task_system_home = blastp_task + system_home;
+    public static final String blastp_result_system_home = blastp_result + system_home;
+    public static final String blastp_system_home = blastp + system_home;
+    public static final String dot_fasta = ".fasta";
+    public static final String dot_db = ".db";
+    public static final String dot_blast = ".blast";
+    public static final String BLAST_DB_folder = "BLAST_DB";
+    public static final String BLAST_RESULT_folder = "BLAST_RESULT";
+    public static final String BLAST_TASK_folder = "BLAST_TASK";
+    public static final String ncbi_folder = "ncbi";
+    public static final String ncbi_system_home =ncbi_folder+system_home;
+    public static final String ORF_Base_folder="ORF_Base";
+    public static final String ncbi_execs="ncbi_execs";
+    public static final String ncbi_execs_system_home=ncbi_execs+system_home;
+    public static final String NCBI_FTP="ftp.ncbi.nlm.nih.gov";
+    public static final String NCBI_FTP_BLAST_EXECS="blast/executables/LATEST";
+    public static final String NCBI_FTP_win64="win64.tar.gz";
+    public static final String NCBI_FTP_win32="win32.tar.gz";
+    public static final String NCBI_FTP_linux32="linux.tar.gz";
+    public static final String NCBI_FTP_linux64="x64-linux.tar.gz";
+    public static final String NCBI_FTP_macos="universal-macosx.tar.gz";
+    public static final String anonymous="anonymous";
+    public static final String BLAST_Gear="BLAST_Gear.tar.gz";
+    public static final String empty_plug="empty";
+    public static final String fine_plug="fine";
+    public static enum platform {
+
+        linux,
+        windows,
+        macos,
+        other;
+    }
+
+    public static platform ensurePlatform() {
+        String OS = System.getProperty("os.name");
+        if (OS.contains(Windows)) {
+            return platform.windows;
+        } else if (OS.contains(Mac)) {
+            return platform.macos;
+        } else if (OS.contains(Linux)) {
+            return platform.linux;
+        } else {
+            return platform.other; //TODO do smth about the "other"
+        }
+    }
+    
+    
+    public static final long blast_task_timeout = 100000;
+    public static final int blast_task_buffer_size = 10;
+}

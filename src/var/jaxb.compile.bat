@@ -1,0 +1,1 @@
+C:\Users\Alexander\Documents\NetBeansProjects\jaxb-ri-20120218\bin\xjc.bat -d C:\Users\Alexander\Documents\NetBeansProjects\GenBLASTer\src -p genblaster.properties.jaxb -dtd C:\Users\Alexander\Documents\NetBeansProjects\GenBLASTer\src\genblaster\properties\jaxb\properties.dtd

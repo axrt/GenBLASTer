@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+
+<!DOCTYPE GenBLASTer_Properties PUBLIC 'PUBLIC:-//GenBLASTER/Properties//EN' 'properties.dtd'>
+
+<GenBLASTer_Properties>
+    <GenBLASTer_home_dir directory="/home/alext/.genblaster"/>
+    <GenBLASTer_db_dir directory="/home/alext/.genblasterDB"/>
+    <ServerProperties>
+        <UseServer use="yes"/>
+        <ServerPort port="9531"/>
+    </ServerProperties>
+    <BLAST_Properties>
+        <Evalue value="1"/>
+        <SimultaniousBLASTs number="4"/>
+        <MinORFLength value="150"/>
+        <MaxORFLength value="10000"/>
+        <ORFPool value="10000"/>
+    </BLAST_Properties>
+    <Genomes>
+        <Genome path="/home/alext/Documents/BioInfo/crapless_run_no_segmasking/DATA/Genomes/a_macrogynus.fasta" name="a_macrogynus">
+            <GeneticTable type="standard"/>
+        </Genome>
+        <Genome path="/home/alext/Documents/BioInfo/crapless_run_no_segmasking/DATA/Genomes/X5.fasta" name="X5">
+            <GeneticTable type="altered">
+                <AlterCodon codon="TAA" aminoacid="Q"/>
+                <AlterCodon codon="TAG" aminoacid="Q"/>
+            </GeneticTable>
+        </Genome>
+    </Genomes>
+</GenBLASTer_Properties>

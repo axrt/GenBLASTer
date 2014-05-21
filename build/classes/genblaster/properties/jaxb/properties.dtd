@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+
+<!--
+    TODO define vocabulary identification data
+    PUBLIC ID  : -//vendor//vocabulary//EN
+    SYSTEM ID  : http://server/path/__NAME__
+-->
+
+<!-- TODO define your own vocabulary/syntax. Example follows:  -->
+<!ELEMENT GenBLASTer_Properties (GenBLASTer_home_dir,GenBLASTer_db_dir,RoleInCluster,
+ClusterProperties,DistanceMatrixType,BLAST_Properties,Genomes)>
+<!ATTLIST GenBLASTer_home_dir directory CDATA #REQUIRED>
+<!ATTLIST GenBLASTer_db_dir directory CDATA #REQUIRED>
+<!ATTLIST RoleInCluster role (satellite|core) #REQUIRED>
+<!ELEMENT RoleInCluster (SatelliteProperties)>
+<!ATTLIST SatelliteProperties uri CDATA #REQUIRED port CDATA #REQUIRED name CDATA #REQUIRED>
+<!ATTLIST DistanceMatrixType type (average|median) #REQUIRED>
+<!ELEMENT ClusterProperties (UseCluster,ClusterSatellites)>
+<!ATTLIST UseCluster use (yes|no) #REQUIRED>
+<!ELEMENT ClusterSatellites (ClusterSatellite*)>
+<!ATTLIST ClusterSatellite summon (yes|no) #REQUIRED name CDATA #REQUIRED uri CDATA #REQUIRED port CDATA #REQUIRED batch_size CDATA #REQUIRED>
+<!ELEMENT BLAST_Properties (Evalue,SimultaniousBLASTs,MinORFLength,MaxORFLength,ORFPool)>
+<!ATTLIST Evalue value CDATA  #REQUIRED>
+<!ATTLIST SimultaniousBLASTs number CDATA #REQUIRED>
+<!ATTLIST MinORFLength value CDATA #REQUIRED>
+<!ATTLIST MaxORFLength value CDATA #REQUIRED>
+<!ATTLIST ORFPool value CDATA #REQUIRED>
+<!ELEMENT Genomes (Genome*)>
+<!ATTLIST Genome path CDATA #REQUIRED name CDATA #REQUIRED needs_check (yes|no) #REQUIRED>
+<!ELEMENT Genome (GeneticTable,Additives)>
+<!ATTLIST GeneticTable type (standard|altered) #REQUIRED>
+<!ELEMENT GeneticTable (AlterCodon*)>
+<!ATTLIST AlterCodon codon CDATA #REQUIRED aminoacid CDATA #REQUIRED>
+<!ELEMENT Additives (Additive*)>
+<!ATTLIST Additive path CDATA #REQUIRED name CDATA #REQUIRED>

@@ -1,0 +1,67 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package genblaster;
+
+import genblaster.NCBI.BLAST.BLASTer;
+import genblaster.NCBI.BLAST.GenomeCrossBLAST_Task_Charger;
+import genblaster.db.DatabaseConnector;
+import genblaster.db.derby.DerbyDBConnector;
+import genblaster.genome.GenomeDigester;
+import genblaster.output.FitchMatrix;
+import genblaster.properties.PropertiesLoader;
+import genblaster.rmi.RemoteBLASTHelperServer;
+import java.io.File;
+
+/**
+ *
+ * @author Alexander
+ */
+public class GenBLASTer {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+
+        try {
+//            PropertiesLoader loader = PropertiesLoader.newInstance(new File("C:/Users/Alexander/Documents/NetBeansProjects/GenBLASTer/src/genblaster/properties/driver.xml"));
+        PropertiesLoader loader= PropertiesLoader.newInstance(new File("/home/alext/NetBeansProjects/GenBLASTer/src/genblaster/properties/driver_satellite.xml"));
+//            String jDir = new File(GenBLASTer.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getParent();
+//            System.out.println(jDir);
+//            PropertiesLoader loader = PropertiesLoader.newInstance(new File(jDir + SystemUtil.SysFS + "driver.xml"));
+            loader.loadAndCheckProperties();
+            if (loader.isThisInstanceRunsAsCore()) {
+                DatabaseConnector databaseConnector = DerbyDBConnector.defaultConnectorInstance();
+                databaseConnector.connectToEmbeddedDatabase();
+                if (!databaseConnector.databasePassesChecks()) {
+                    throw new Exception("Could not process the DataBase..");
+                }
+                GenomeDigester digester = GenomeDigester.newInstance(loader, databaseConnector);
+                digester.processGenomes();
+                GenomeCrossBLAST_Task_Charger charger = digester.chargeCrossBLASTs();
+                charger.launch();
+                BLASTer blaster = BLASTer.newInstance(databaseConnector, charger,
+                        loader.getNumberOfSimultaniousBLASTs(), loader.getClusterSatellites());
+                blaster.launch();
+                charger.calculateTaxonomicDistances(loader.getDt());
+                FitchMatrix fitchMatrix = FitchMatrix.newInstanceFromDistanceIDs(
+                        databaseConnector.newMatrix_sluice(), charger.getCrossBLAST_Distance_ids());
+                fitchMatrix.formText();
+                fitchMatrix.formLegend();
+                fitchMatrix.saveMatrixToFile(loader.getMatrix_folder());
+                System.out.println("Sucks ass!");
+            } else {
+                RemoteBLASTHelperServer remoteBLASTHelperServer= RemoteBLASTHelperServer.newInstance(
+                        loader.getNumberOfSimultaniousBLASTs(), loader.getName(),
+                        loader.getPreferred_satellite_uri(), loader.getPort());
+                remoteBLASTHelperServer.selfDeploy();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+
+    }
+}

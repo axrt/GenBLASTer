@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+
+<!DOCTYPE GenBLASTer_Properties PUBLIC 'PUBLIC:-//GenBLASTER/Properties//EN' 'properties.dtd'>
+
+<GenBLASTer_Properties>
+    <GenBLASTer_home_dir directory="/home/alext/.genblaster"/>
+    <GenBLASTer_db_dir directory="/home/alext/.genblasterDB"/>
+    <RoleInCluster role="satellite">
+        <SatelliteProperties uri="95.31.31.87" name="LDT" port="9531"/>
+    </RoleInCluster>
+    <ClusterProperties>
+        <UseCluster use="yes"/>
+        <ClusterSatellites>
+            <ClusterSatellite summon="yes" name="LDT" batch_size="10" uri="95.31.31.87" port="9531"/> 
+        </ClusterSatellites>
+    </ClusterProperties>
+    <DistanceMatrixType type="average"/>
+    <BLAST_Properties>
+        <Evalue value="1"/>
+        <SimultaniousBLASTs number="4"/>
+        <MinORFLength value="150"/>
+        <MaxORFLength value="10000"/>
+        <ORFPool value="10000"/>
+    </BLAST_Properties>
+    <Genomes>
+        <Genome path="C:/Users/Alexander/Documents/MFBT project/GenBLASTer/a_macrogynus.fasta" name="a_macrogynus" needs_check="yes">
+            <GeneticTable type="standard"/>
+            <Additives/>
+        </Genome>
+        <Genome path="C:/Users/Alexander/Documents/MFBT project/GenBLASTer/X5.fasta" name="X5" needs_check="yes">
+            <GeneticTable type="altered">
+                <AlterCodon codon="TAA" aminoacid="Q"/>
+                <AlterCodon codon="TAG" aminoacid="Q"/>
+            </GeneticTable>
+            <Additives/>
+        </Genome>
+    </Genomes>
+</GenBLASTer_Properties>
